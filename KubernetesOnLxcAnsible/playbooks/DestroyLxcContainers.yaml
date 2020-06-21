@@ -1,0 +1,15 @@
+- hosts: local
+  become: true
+  tasks:
+  - name: "Create LXC Containers"
+    lxc_container:
+      name: "{{item}}"
+      template: ubuntu
+      state: "absent"
+      archive: false
+    with_items:
+      - "{{controller_container}}"
+      - "{{worker_containers}}"
+  vars_files:
+    - vars/containers.yaml
+

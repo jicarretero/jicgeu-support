@@ -1,0 +1,82 @@
+- hosts: "{{host | default('all')}}"
+  become: true
+  tasks: 
+  - name: "Init Kubernetes Cluster... this can take some long time"
+    # Inside the container, we need to use --ignore-preflight-errors=all. However, if we used this
+    # in a Virtual Machine/Server we should run this without the parameter.
+    # This is run only in the K8S Controller.
+    shell: |
+      kubeadm init --apiserver-advertise-address="{{ansible_eth0.ipv4.address}}" --pod-network-cidr=172.16.0.0/16 "{{k8s_extra_parameters}}"
+    when: type == "controller"
+    register: kubeadm_init
+
+  - name: "Create .kube directory for user {{user}}"
+    # Copy configuration file for kubernetes to the well known directory. So the user "{{user}}" will
+    # be able to run kubectl commands. It'll be kubernetes administrator.
+    file:
+      path: "~{{user}}/.kube"
+      owner: "{{user}}"
+      group: "{{group}}"
+      state: directory
+    when: type == "controller"
+
+  - name: "Copy configuration to Ubuntu's .kube directory"
+    # We copy the configurationfile to Ubuntu's home directory. This will allow "{{user}}" to run kubectl
+    # commands. kubectl should not run as root.
+    copy:
+      src: /etc/kubernetes/admin.conf
+      dest: "~{{user}}/.kube/config"
+      remote_src: yes
+      owner: "{{user}}"
+      group: "{{group}}"
+    when: type == "controller"
+
+  - name:
+    # A network driver is needed for Kubernetes to run. We'll use flannel.
+    shell: |
+      kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+    become_user: "{{user}}"
+    when: type == "controller"
+    
+  - name: "Get Join Command from Kubernetes"
+    become_user: "{{user}}"
+    shell: |
+      kubeadm token create --print-join-command
+    register: kubeadm_join_output
+    when: type == "controller"
+  
+  - set_fact: kube_join_command="{{kubeadm_join_output.stdout}} {{k8s_extra_parameters}}"
+    when: type == "controller"
+
+  - name: "Debug Join Command Output"
+    # Create the join command as an script, so it can be uploaded to the worker nodes
+    # and it can be executed for the Worker nodes to join the kubernetes cluster
+    shell: |
+      echo "#!/bin/bash\n\n{{kube_join_command}}" > /tmp/kube_join_command.sh
+    delegate_to: localhost
+    when: type == "controller"
+
+  - name: "Copy new script to nodes"
+    # Copy the script to join Kubernetes to the workers of the cluster
+    copy:
+      src: /tmp/kube_join_command.sh
+      dest: /tmp/kube_join_command.sh
+      mode: 755
+    when: type == "worker"
+
+  - name: "Exec the Join Command on Workers"
+    # Exec the script to join the Kubernetes cluster in the Worker nodes.
+    shell: |
+      /tmp/kube_join_command.sh
+    when: type == "worker"
+
+  - name: "Create the nginx-ingress add-on"
+    # Let's install ingress to manage access to HTTP objects in Kubernetes.
+    shell: |
+      kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/baremetal/deploy.yaml
+    become_user: "{{user}}"
+    when: type == "controller"
+
+  vars_files:
+    - vars/variables.yaml
+

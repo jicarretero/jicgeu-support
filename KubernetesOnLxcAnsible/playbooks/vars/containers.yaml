@@ -1,0 +1,7 @@
+controller_container:
+  - kcontroller
+worker_containers:
+  - kworker1
+  - kworker2
+  - kworker3
+  - kworker4

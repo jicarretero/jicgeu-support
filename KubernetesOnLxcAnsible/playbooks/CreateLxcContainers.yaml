@@ -1,0 +1,28 @@
+- hosts: local
+  become: true
+  tasks:
+  - name: "Create LXC Containers"
+    lxc_container:
+      name: "{{item}}"
+      template: ubuntu
+      state: "{{state | default('started')}}"
+      template_options: --release focal
+      container_config:
+        - "linux.kernel_modules=ip_tables,ip6_tables,netlink_diag,nf_nat,overlay"
+        - "lxc.apparmor.profile=unconfined" 
+        - "lxc.cap.drop=" 
+        - "lxc.cgroup.devices.allow=a" 
+        - "lxc.mount.auto=proc:rw sys:rw" 
+        - "security.nesting=true"
+        - "security.privileged=true"
+    with_items:
+      - "{{ controller_container }}"
+      - "{{ worker_containers }}"
+    register: containers_info
+
+  - name: debug things
+    debug:
+      var: containers_info
+
+  vars_files:
+    - vars/containers.yaml

@@ -1,0 +1,52 @@
+- hosts: "{{host | default('all')}}"
+  become: true
+  tasks:
+  - name: "Install Dockers inside the container"
+    # Packages git and jq is for (my) convenience.
+    apt:
+      name: ['docker', 'docker.io', 'curl', 'software-properties-common', 'git', 'jq']
+      state: present
+      update_cache: yes
+
+  - name: "Ensure service Docker is enabled from the start"
+    systemd:
+      name: docker
+      enabled: yes
+      state: started 
+
+  - name: "Add Google's kubernetes key"
+    apt_key:
+      state: present
+      url: "{{google_apt_key_url}}"
+
+  - name: "Add Google's kubernetes repository"
+    apt_repository:
+      state: present
+      repo: "{{kubernetes_deb_repository}}"
+
+  - name: "Install Kuberntes packages."
+    apt:
+      name: ['kubectl', 'kubeadm', 'kubelet']
+      state: present
+      update_cache: yes
+
+  - name: "Create /dev/kmsg device driver"
+    # the character device /dev/kmsg is needed by Kubelet, so we need to create it manually since
+    # it is not presen in the container. If it doesn't exits, Kubelet won't run (K8S won't work).
+    shell: |
+      [ -c /dev/kmsg ] || mknod /dev/kmsg c 1 11
+
+  - name: "Configure sysctl.conf"
+    # Configuration of network parameters for flannel K8S driver
+    lineinfile:
+      path: /etc/sysctl.conf
+      regexp: "^net.bridge.bridge-nf-call-iptables="
+      line: "net.bridge.bridge-nf-call-iptables=1"
+
+  - name: 
+    # Reload the configuration from previous step.
+    shell: |
+      sysctl -p
+
+  vars_files:
+    - vars/variables.yaml
