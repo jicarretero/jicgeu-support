@@ -21,6 +21,29 @@
     with_items:
       - "{{ controller_container }}"
       - "{{ worker_containers }}"
+    when:
+      state=="started"
+
+  - name: "Create LXC Containers"
+    # This is to avoid a run condition I'm meeting where I set /etc/hosts in next step: Sometimes
+    # the containers doesn't have an IP when this action finshes and this is a workaround to
+    # prevent a failure in the next step.
+    lxc_container:
+      name: "{{item}}"
+      template: ubuntu
+      state: "{{state}}"
+      template_options: --release focal
+      container_config:
+        - "linux.kernel_modules=ip_tables,ip6_tables,netlink_diag,nf_nat,overlay"
+        - "lxc.apparmor.profile=unconfined" 
+        - "lxc.cap.drop=" 
+        - "lxc.cgroup.devices.allow=a" 
+        - "lxc.mount.auto=proc:rw sys:rw" 
+        - "security.nesting=true"
+        - "security.privileged=true"
+    with_items:
+      - "{{ controller_container }}"
+      - "{{ worker_containers }}"
     register: containers_info
 
   - name: "Set hosts values for new created containers"
@@ -33,14 +56,27 @@
     with_items:
       "{{containers_info.results}}"
     when:
-      state=="present"
+      state=="started"
 
   - name: "Unset hosts values for deleted containers"
-    # Set /etc/hosts to be able to access the containers by name.
+    # remove from /etc/hosts the IP/Containers IP so it is clean after destroying the cluster
     lineinfile:
       path: /etc/hosts
       regexp: " {{item.item}}$"
       state: absent
+    with_items:
+      "{{containers_info.results}}"
+    when:
+      state=="absent"
+
+  - name: "Remove keys from known hosts for destroyed containers"
+    # I remove the keys from ~/.ssh/known_hosts because if I run these scripts many times, it
+    # might happen that the same IP is used for different containers in differen runs. So, it
+    # might happen to fail some times for some container. This cleans up preventing future
+    # problems
+    command: "ssh-keygen -f ~/.ssh/known_hosts -R \"{{item.lxc_container.ips[0]}}\""
+    become: false
+    ignore_errors: yes
     with_items:
       "{{containers_info.results}}"
     when:

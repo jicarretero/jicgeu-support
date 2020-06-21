@@ -2,6 +2,8 @@
   become: true
   tasks:
   - name: "Install Dockers inside the container"
+    # I install here the packages needed to run docker service (docker and docker.io)
+    # software-properties-common will be needed to add Google's key
     # Packages git and jq is for (my) convenience.
     apt:
       name: ['docker', 'docker.io', 'curl', 'software-properties-common', 'git', 'jq']
@@ -9,23 +11,29 @@
       update_cache: yes
 
   - name: "Ensure service Docker is enabled from the start"
+    # Sometimes, docker is not enabled installing it. So, I'd like to ensure that the
+    # docker is up and running.
     systemd:
       name: docker
       enabled: yes
       state: started 
 
   - name: "Add Google's kubernetes key"
+    # Add the APT key, so I can add later the Repository and install software from the
+    # kubernetes repository.
     apt_key:
       state: present
       url: "{{google_apt_key_url}}"
 
   - name: "Add Google's kubernetes repository"
+    # Add the Kubernetes repository
     apt_repository:
       state: present
       repo: "{{kubernetes_deb_repository}}"
 
   - name: "Install Kuberntes packages."
     apt:
+    # And Install the Kubernetes packages
       name: ['kubectl', 'kubeadm', 'kubelet']
       state: present
       update_cache: yes

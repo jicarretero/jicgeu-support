@@ -39,6 +39,8 @@
     when: type == "controller"
     
   - name: "Get Join Command from Kubernetes"
+    # Exec the command to get the join command in the Controller. So I can create later an script which
+    # can be exec'd in the Workers
     become_user: "{{user}}"
     shell: |
       kubeadm token create --print-join-command
