@@ -1,11 +1,14 @@
 - hosts: local
   become: true
   tasks:
+  - name: "Set state as a fact"
+    set_fact: state="{{state | default('started')}}"
+
   - name: "Create LXC Containers"
     lxc_container:
       name: "{{item}}"
       template: ubuntu
-      state: "{{state | default('started')}}"
+      state: "{{state}}"
       template_options: --release focal
       container_config:
         - "linux.kernel_modules=ip_tables,ip6_tables,netlink_diag,nf_nat,overlay"
@@ -20,9 +23,28 @@
       - "{{ worker_containers }}"
     register: containers_info
 
-  - name: debug things
-    debug:
-      var: containers_info
+  - name: "Set hosts values for new created containers"
+    # Set /etc/hosts to be able to access the containers by name.
+    lineinfile:
+      path: /etc/hosts
+      regexp: " {{item.item}}$"
+      line: "{{item.lxc_container.ips[0]}}     {{item.item}}"
+      state: present
+    with_items:
+      "{{containers_info.results}}"
+    when:
+      state=="present"
+
+  - name: "Unset hosts values for deleted containers"
+    # Set /etc/hosts to be able to access the containers by name.
+    lineinfile:
+      path: /etc/hosts
+      regexp: " {{item.item}}$"
+      state: absent
+    with_items:
+      "{{containers_info.results}}"
+    when:
+      state=="absent"
 
   vars_files:
     - vars/containers.yaml
