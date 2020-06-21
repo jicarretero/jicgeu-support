@@ -21,8 +21,7 @@
     with_items:
       - "{{ controller_container }}"
       - "{{ worker_containers }}"
-    when:
-      state=="started"
+    register: containers_info
 
   - name: "Create LXC Containers"
     # This is to avoid a run condition I'm meeting where I set /etc/hosts in next step: Sometimes
@@ -45,6 +44,8 @@
       - "{{ controller_container }}"
       - "{{ worker_containers }}"
     register: containers_info
+    when:
+      state=="started"
 
   - name: "Set hosts values for new created containers"
     # Set /etc/hosts to be able to access the containers by name.
@@ -64,19 +65,6 @@
       path: /etc/hosts
       regexp: " {{item.item}}$"
       state: absent
-    with_items:
-      "{{containers_info.results}}"
-    when:
-      state=="absent"
-
-  - name: "Remove keys from known hosts for destroyed containers"
-    # I remove the keys from ~/.ssh/known_hosts because if I run these scripts many times, it
-    # might happen that the same IP is used for different containers in differen runs. So, it
-    # might happen to fail some times for some container. This cleans up preventing future
-    # problems
-    command: "ssh-keygen -f ~/.ssh/known_hosts -R \"{{item.lxc_container.ips[0]}}\""
-    become: false
-    ignore_errors: yes
     with_items:
       "{{containers_info.results}}"
     when:

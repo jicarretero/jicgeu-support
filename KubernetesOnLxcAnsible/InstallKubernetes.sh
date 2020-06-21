@@ -11,5 +11,4 @@ sudo ./GenerateEnvironment.py | tee container_inventory
 ansible-playbook  -i container_inventory playbooks/InstallDockers.yaml
 ansible-playbook  -i container_inventory playbooks/ConfigureKubernetes.yaml
 
-# Puedo pasar a los 2 últimos playbooks " -e host=10.0.3.7" para añadir
-# nuevos Workers.
+# I can run the last 2 playbooks the param " -e host=10.0.3.7" to add new worker nodes.
