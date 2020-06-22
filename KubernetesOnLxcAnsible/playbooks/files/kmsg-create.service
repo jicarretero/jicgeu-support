@@ -1,0 +1,13 @@
+[Unit]
+Description=Create /dev/kmsg before starting Kubernetes.
+Before=kubelet.service
+[Service]
+
+Type=oneshot
+ExecStart=/sbin/kmsg-mknod
+RemainAfterExit=yes
+TimeoutSec=0
+
+[Install]
+WantedBy=multi-user.target
+
