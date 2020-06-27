@@ -1,0 +1,79 @@
+- hosts: all
+  become: true
+  tasks:
+  - name: Create Group for kolla user
+    group: 
+      name: kolla
+      state: present
+
+  - name: Create Kolla user with kolla group
+    user: 
+      name: kolla
+      comment: Kolla user
+      group: kolla
+      state: present
+      shell: /bin/bash
+      create_home: true
+      home: /home/kolla
+
+  - name: Add kolla as a sudoer user
+    lineinfile:
+      path: /etc/sudoers
+      regexp: "^kolla "
+      line: "kolla          ALL=(ALL:ALL) NOPASSWD: ALL"
+
+  - name: Add authorized key for user kolla
+    authorized_key:
+      user: kolla
+      state: present
+      key: "{{public_key}}"
+
+  - name: Add hosts names to /etc/hosts
+    lineinfile:
+      path: /etc/hosts
+      regexp: "^{{item.ip1}} "
+      line: "{{item.ip1}}     {{item.name}}"
+    with_items:
+      - "{{ controller_container }}"
+      - "{{ compute_containers }}"
+   
+  - name: Insert Neplan template
+    template:
+      dest: /etc/netplan/10-lxc.yaml
+      src: templates/10-lxc.yaml.j2
+      owner: root
+      group: root
+      mode: 644
+
+  - name: Apply the netplan to ensure all interfaces are properly configured
+    shell: |
+      netplan apply
+
+  - name: "Install Kolla ansible required packages"
+    apt:
+      name: ["gpg","ufw", "software-properties-common", "lsof", "python3-setuptools", 
+             "python3-pip", "python-docker", "python3-docker"]
+      state: present
+      update_cache: yes
+
+  - name: "Copy service to set /run shared"
+    copy:
+      src: "files/shared-run.service"
+      dest: "/lib/systemd/system/shared-run.service"
+      mode: 644
+
+  - name: "Copy shared-run.sh script"
+    copy:
+      src: "files/shared-run.sh"
+      dest: "/sbin/shared-run.sh"
+      mode: 750
+
+  - name: "Ensure shared-run service is enabled and up"
+    systemd:
+      name: shared-run
+      enabled: yes
+      state: started
+
+  vars_files:
+    - vars/containers.yaml
+

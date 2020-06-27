@@ -1,0 +1,63 @@
+- hosts: local
+  become: true
+  tasks:
+  - name: "Set state as a fact"
+    set_fact: state="{{state | default('started')}}"
+
+  - name: "Ensure the second and 3rd bridge"
+    shell: |
+        iptables -t nat -D POSTROUTING -s 172.23.16.0/24 ! -d 172.23.16.0/24 -j MASQUERADE || true
+        brctl addbr br-os || true
+        brctl addbr br-ext || true
+        ip addr add 172.23.16.1/24 dev br-ext  || true
+        ip addr add 172.23.32.1/24 dev br-os  || true
+        ip link set br-os up
+        ip link set br-ext up
+        iptables -t nat -A POSTROUTING -s 172.23.16.0/24 ! -d 172.23.16.0/24 -j MASQUERADE
+        modprobe ebtables
+        modprobe tap
+        modprobe ip_vs
+    when:
+      state=="started"
+
+  - name: "Create or destroy LXC Containers"
+    lxc_container:
+      name: "{{item.name}}"
+      template: ubuntu
+      state: "{{state}}"
+      template_options: --release bionic
+      container_config:
+        - "lxc.cgroup.devices.allow=c 10:200 rwm"
+        - "linux.kernel_modules=ip_tables,ip6_tables,netlink_diag,nf_nat,overlay,ip_vs,kvm,kvm_intel,tun,tap"
+        - "lxc.apparmor.profile=unconfined"
+        - "lxc.cap.drop="
+        - "lxc.cgroup.devices.allow=a"
+        - "lxc.mount.auto=proc:rw sys:rw"
+        - "security.nesting=true"
+        - "security.privileged=true"
+        - "lxc.net.0.type=veth"
+        - "lxc.net.0.flags=up"
+        - "lxc.net.1.type=veth"
+        - "lxc.net.1.link={{bridge_external}}"
+        - "lx.net.1.ipv4.address={{item.ip1}}"
+        - "lxc.net.1.flags=up"
+        - "lxc.net.2.type=veth"
+        - "lxc.net.2.link={{bridge}}"
+        - "lxc.net.2.ipv4.address={{item.ip2}}"
+        - "lxc.net.2.flags=up"
+    with_items:
+      - "{{ controller_container }}"
+      - "{{ compute_containers }}"
+    register: containers_info
+
+  - name: "Install Kolla ansible required packages"
+    apt:
+      name: ["python-dev", "libffi-dev", "gcc", "libssl-dev"]
+      state: present
+      update_cache: yes
+    when:
+      state=="started"
+
+  vars_files:
+    - vars/containers.yaml
+

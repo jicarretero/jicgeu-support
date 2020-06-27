@@ -1,0 +1,2 @@
+openstack flavor create --public --ram 1024 --disk 10 --vcpus 1 small
+openstack flavor create --public --ram 2048 --disk 10 --vcpus 2 medium

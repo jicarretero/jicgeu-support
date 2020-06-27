@@ -1,0 +1,16 @@
+unset OS_TENANT_ID
+unset OS_TENANT_NAME
+
+export OS_REGION_NAME="RegionDemo"
+export OS_USERNAME='admin'
+export OS_PASSWORD=DrXMLxtrIDl2MIwZq6hZJTU0wUvyZ2KvWSEwgJy9
+export OS_AUTH_URL=http://172.23.32.2:5000
+export OS_PROJECT_NAME=admin
+
+export OS_PROJECT_DOMAIN_ID=default
+export OS_USER_DOMAIN_ID=default
+export OS_IDENTITY_API_VERSION=3
+
+export PS1='[\u@\h \W(keystone_admin)]\$ '
+source /home/jicg/.venv/ansible/bin/activate
+
