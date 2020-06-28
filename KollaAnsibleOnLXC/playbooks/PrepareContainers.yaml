@@ -1,12 +1,12 @@
 - hosts: all
   become: true
   tasks:
-  - name: Create Group for kolla user: Add group kolla
+  - name: Create Group for kolla user. Add group kolla
     group: 
       name: kolla
       state: present
 
-  - name: Create Kolla user with kolla group: Create user kolla
+  - name: Create Kolla user with kolla group. Create user kolla
     user: 
       name: kolla
       comment: Kolla user
