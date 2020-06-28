@@ -11,3 +11,10 @@ It is a simple way to deploy a Kubernetes infrastructure using LXC to create "so
 
 However, you must know this is not for production but for self training or making some demo.
 
+## Openstack Infrastructure Over LXC
+
+In this directory, you can find the code from the article: [https://www.jicg.eu/index.php/2020/06/27/deploying-openstack-with-ansible-kolla-on-lxc/]()
+
+The First thing I wrote is a deployment of [Deploying Openstack with ansible-kolla on LXC](KollaAnsibleOnLXC/README.md)
+
+Again, you must be aware that this is not for production but for self training or making some demo.
