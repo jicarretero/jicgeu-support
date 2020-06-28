@@ -40,7 +40,17 @@ In order to deploy the Openstackc cluster, you can use the script:
         
 This will remove all the previous infrastructure you might have created previously and will build a new one deploying the containers needed. There is no script this time to deploy the Openstack infrastructure over the containes. You must do it manually using the command _kolla-ansible_.
 
-Once the containers are deployed and running, the Openstack infrastructure will be deployed with the next 3 commands:
+_kolla-ansible_ expects at least 2 configuration files in /etc/kolla. I've provided here example files for this (./etc/kolla). The simplest way to set this up is using a symbolic link:
+
+        ln -s ./etc/kolla /etc/kolla
+        
+In ./etc/kolla/passwords.yml you'll find many passwords. These passwords can be overwritten (in fact they should) with new passwords using the command
+
+        kolla-genpwd
+
+One more thing: to let kolla access using ssh to the containers, in the file _playbooks/vars/containers.yaml_ you must set the value of the variable __public_key__ with your Public Key. Some more tweaks must be done if you want to work without that.
+
+Once the containers are deployed and running and /etc/kolla is properly set, ans your public ssh-key is in the variables file, the Openstack infrastructure will be deployed with the next 3 commands:
 
 The first one will install some software required in the containers:
 
@@ -54,3 +64,28 @@ The last one is the deployment itself:
 
         kolla-ansible -i multinode deploy
         
+After this, the cluster should be up and running. You might want to start and stop it instead of creating a new cluster every time:
+
+        ansible-playbook  -i inventory playbooks/CreateLxcContainers.yaml -e state=started
+        
+        ansible-playbook -i inventory playbooks/CreateLxcContainers.yaml -e state=stopped
+        
+That's it. I would also recommend to add a few lines to your /etc/hosts to make ssh easier:
+
+        172.23.32.254	  controller
+        172.23.32.5     compute-01
+        172.23.32.6     compute-02
+        172.23.32.7     compute-03
+
+
+## Starting with Openstack
+
+The Admin user is __admin__ and the admin password is in _/etc/globals/passwords.yml_ set in the variable __keystone_admin_password__. You can find it this way:
+
+        grep keystone_admin_password /etc/kolla/passwords.yml
+        
+There is a file named _keystoneIdmLocal_ which sets the variables to properly work with Openstack CLI.
+
+        source ./keystoneIdmLocal
+        
+Now you can use Openstack CLI. Here are some useful examples to use in your new Openstack Installation: [examples/README.md]()
