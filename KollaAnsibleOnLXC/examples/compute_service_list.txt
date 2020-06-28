@@ -1,1 +1,0 @@
-openstack compute service list
