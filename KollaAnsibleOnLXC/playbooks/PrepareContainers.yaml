@@ -1,12 +1,12 @@
 - hosts: all
   become: true
   tasks:
-  - name: Create Group for kolla user
+  - name: Create Group for kolla user: Add group kolla
     group: 
       name: kolla
       state: present
 
-  - name: Create Kolla user with kolla group
+  - name: Create Kolla user with kolla group: Create user kolla
     user: 
       name: kolla
       comment: Kolla user
@@ -23,12 +23,14 @@
       line: "kolla          ALL=(ALL:ALL) NOPASSWD: ALL"
 
   - name: Add authorized key for user kolla
+    # So it can be accessed by ssh. This is variable public_key in vars/containers.yml
     authorized_key:
       user: kolla
       state: present
       key: "{{public_key}}"
 
   - name: Add hosts names to /etc/hosts
+    # Add /etc/hosts for every container, so one can know each other names.
     lineinfile:
       path: /etc/hosts
       regexp: "^{{item.ip1}} "
@@ -38,6 +40,7 @@
       - "{{ compute_containers }}"
    
   - name: Insert Neplan template
+    # Insert Network configuration file.
     template:
       dest: /etc/netplan/10-lxc.yaml
       src: templates/10-lxc.yaml.j2
@@ -46,10 +49,12 @@
       mode: 644
 
   - name: Apply the netplan to ensure all interfaces are properly configured
+    # Restart the network in the container to load the configuration
     shell: |
       netplan apply
 
   - name: "Install Kolla ansible required packages"
+    # Install a few packages required for ansible-kolla to work properly (lsof is my convenience).
     apt:
       name: ["gpg","ufw", "software-properties-common", "lsof", "python3-setuptools", 
              "python3-pip", "python-docker", "python3-docker"]
@@ -57,18 +62,22 @@
       update_cache: yes
 
   - name: "Copy service to set /run shared"
+    # Add the service to create the needed character devices in the containers at startup 
+    # and set the /run as shared. This is needed for the Openstack dockers.
     copy:
       src: "files/shared-run.service"
       dest: "/lib/systemd/system/shared-run.service"
       mode: 644
 
   - name: "Copy shared-run.sh script"
+    # This one goes with the previous one.
     copy:
       src: "files/shared-run.sh"
       dest: "/sbin/shared-run.sh"
       mode: 750
 
   - name: "Ensure shared-run service is enabled and up"
+    # This one starts the service copied above and enables it for every restart.
     systemd:
       name: shared-run
       enabled: yes
@@ -76,4 +85,3 @@
 
   vars_files:
     - vars/containers.yaml
-

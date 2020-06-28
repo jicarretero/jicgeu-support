@@ -1,20 +1,44 @@
-# bridge: br-os
-bridge: br-os
-bridge_external: br-ext
-gateway: 172.23.0.1
-public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDav74floCqNH69aWyyiSyNZy14szoUfQeOyVzNeYNiobyjH5ssRqxyQU3v5demphI6qx8AKV0sKEFrg7SH2Pfta4NHqRm2cgKHNGNkpr+vVrkVv/ZEwvZP7+JagtbyUWhjX/MGKx2+4YWdeaWQJ5NZ13RHJ6FpNSxpUqwbTwsd8gJJZhUyXPzzyeGMfnOdr7lEEQSTxkdBVQxjaKxeP8xTfnFpHKwSIp68XD2FQn+qv6UQJPEvosr5t1wOohLgQERTu4/e9rRo4iOeX71dPoXiFm52ce1A/oyyaSsYPBNZpEYUXgPsBmjZwzccWUuN+CHCGYNZOnOVBnsgm7ZPF4oh
+# Definition of the 2 briges I'll be using.
+# br-ext: Wich will be attached to eth1 in LXC containers.
+# br-os:  Which will be attached to eth1 in LXC containers for internal communications.
+bridges:
+  - name: br-ext
+    ip: 172.23.16.1/24
+    type: external
+    network: 172.23.16.0
+  - name: br-os
+    ip: 172.23.32.1/24
+    type: internal
+    network: 
+
+bridge_external: "{{bridges[0].name}}"
+bridge: "{{bridges[1].name}}"
+
+# Gateway of external VMs
+gateway: 172.23.16.1
+
+# ssh-rsa public key to be added to the containes to be used to ssh the containers by Kolla
+public_key: ssh-rsa whatever is your public ssh-key
+
+# Definition of the Controller Container.
+# -- No need for IP1 (IP in eth1) as it is an external network
+# -- 172.23.32.2/24 in IP2 (IP in eth2)
 controller_container:
   - name: controller
-    ip: 10.0.3.2/24
-    ip1: 172.23.16.2/24
+    ip1:
     ip2: 172.23.32.2/24
+
+
+# Definition of the Compute Containers.
+# -- No need for IP1 (IP in eth1) as it is an external network
+# -- 172.23.32.5,6,7/24 in IP2 (IP in eth2)
 compute_containers:
   - name: compute-01
-    ip1: 172.23.16.5/24
+    ip1:
     ip2: 172.23.32.5/24
   - name: compute-02
-    ip1: 172.23.16.6/24
+    ip1:
     ip2: 172.23.32.6/24
   - name: compute-03
-    ip1: 172.23.16.7/24
+    ip1:
     ip2: 172.23.32.7/24

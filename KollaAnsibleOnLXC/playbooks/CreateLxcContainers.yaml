@@ -3,24 +3,44 @@
   tasks:
   - name: "Set state as a fact"
     set_fact: state="{{state | default('started')}}"
-
+  
   - name: "Ensure the second and 3rd bridge"
+    # Ensure the bridges internal (br-os) and external (br-ex) are created and they have the proper
+    # IP address. For the external bridge, ensure that It'll be able to forward traffic to the host's
+    # gateway (iptables... -j MASQUERADE).
+    # 
+    # net.ipv4.ip_forward = 1 is mandatory (that line must be in /etc/systcl.conf and sysctl -p must
+    #    be executed once (or reboot).
     shell: |
-        iptables -t nat -D POSTROUTING -s 172.23.16.0/24 ! -d 172.23.16.0/24 -j MASQUERADE || true
-        brctl addbr br-os || true
-        brctl addbr br-ext || true
-        ip addr add 172.23.16.1/24 dev br-ext  || true
-        ip addr add 172.23.32.1/24 dev br-os  || true
-        ip link set br-os up
-        ip link set br-ext up
-        iptables -t nat -A POSTROUTING -s 172.23.16.0/24 ! -d 172.23.16.0/24 -j MASQUERADE
-        modprobe ebtables
-        modprobe tap
-        modprobe ip_vs
+        brctl addbr "{{item.name}}" || true
+        ip addr add "{{item.ip}}" dev "{{item.name}}" || true
+        ip link set "{{item.name}}" up
+        {% if item.type=="external" %} 
+        iptables -t nat -D POSTROUTING -s "{{item.network}}" ! -d "{{item.network}}" -j MASQUERADE || true
+        iptables -t nat -A POSTROUTING -s "{{item.network}}" ! -d "{{item.network}}" -j MASQUERADE
+        {% endif %}
+    with_items:
+      - "{{ bridges }}"
     when:
       state=="started"
 
+  - name: "Ensure few modules are enabled when starting the containers"
+    # We need a few modules to be loaded in the host, so they can be used in the underlying LXC
+    # containers. There are a few other modules needed, like tap or kvm, but they are already
+    # running
+    shell: |
+      modprobe "{{item}}"
+    with_items:
+      - ebtables
+      - tap
+      - ip_vs
+
   - name: "Create or destroy LXC Containers"
+    # Create a new container with 3 network interfaces:
+    # 0 -- Connected to lxcbr0 (LXC bridge) used to install software, etc.
+    # 1 -- Connected to a bridge which will be used as external bridge. So the VMs can connect to
+    #      the internet. No need for an IP.
+    # 2 -- Connected to a bridge use to manage the Openstack cluster and internal communications.
     lxc_container:
       name: "{{item.name}}"
       template: ubuntu
@@ -39,7 +59,7 @@
         - "lxc.net.0.flags=up"
         - "lxc.net.1.type=veth"
         - "lxc.net.1.link={{bridge_external}}"
-        - "lx.net.1.ipv4.address={{item.ip1}}"
+        - "lx.net.1.ipv4.address="
         - "lxc.net.1.flags=up"
         - "lxc.net.2.type=veth"
         - "lxc.net.2.link={{bridge}}"
@@ -51,8 +71,9 @@
     register: containers_info
 
   - name: "Install Kolla ansible required packages"
+    # Install some software needed.
     apt:
-      name: ["python-dev", "libffi-dev", "gcc", "libssl-dev"]
+      name: ["python-dev", "libffi-dev", "gcc", "libssl-dev", "qemu-kvm"]
       state: present
       update_cache: yes
     when:

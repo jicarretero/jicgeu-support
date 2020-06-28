@@ -1,10 +1,10 @@
 [controller_container]
-172.23.32.2 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu type=controller ip1=172.23.16.2/24 ip2=172.23.32.2/24
+172.23.32.2 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu type=controller ip1=None ip2=172.23.32.2/24
 
 [compute_containers]
-172.23.32.5 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu type=compute ip1=172.23.16.5/24 ip2=172.23.32.5/24
-172.23.32.6 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu type=compute ip1=172.23.16.6/24 ip2=172.23.32.6/24
-172.23.32.7 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu type=compute ip1=172.23.16.7/24 ip2=172.23.32.7/24
+172.23.32.5 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu type=compute ip1=None ip2=172.23.32.5/24
+172.23.32.6 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu type=compute ip1=None ip2=172.23.32.6/24
+172.23.32.7 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu type=compute ip1=None ip2=172.23.32.7/24
 
 [all:children]
 controller_container

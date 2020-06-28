@@ -78,6 +78,15 @@ That's it. I would also recommend to add a few lines to your /etc/hosts to make 
         172.23.32.7     compute-03
 
 
+## The Files here:
+* _ansible.cfg_ - Configurations for ansible and kolla-ansible
+* _inventory_ - Inventory (just localhost) for Ansible
+* _containers_inventory_  - Inventory for the containers installation.
+* _multinode_  - Kolla-ansible inventory file. This is a bit more complex than the previous ones
+* _keystoneIdmLocal_  - Configuration for Openstack CLI according to my configurations.
+* _GenerateEnvironment.py_ - A naive script that writes to stdout what should be your containers_inventory file with your configurations.
+* _InstallContainers.sh_ - This script destroys your previous Openstack Installation and creates and configures the Containers where to install a new Openstack Installation.
+
 ## Starting with Openstack
 
 The Admin user is __admin__ and the admin password is in _/etc/globals/passwords.yml_ set in the variable __keystone_admin_password__. You can find it this way:
@@ -88,4 +97,4 @@ There is a file named _keystoneIdmLocal_ which sets the variables to properly wo
 
         source ./keystoneIdmLocal
         
-Now you can use Openstack CLI. Here are some useful examples to use in your new Openstack Installation: [examples/README.md]()
+Now you can use Openstack CLI. Here are some useful examples to use in your new Openstack Installation: [examples]()
