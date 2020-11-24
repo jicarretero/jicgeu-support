@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  docker.cnf: |+
+    [mysqld]
+    skip-host-cache
+    skip-name-resolve
+
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: mysql-conf
+  labels:
+    name: mysql-rs
+

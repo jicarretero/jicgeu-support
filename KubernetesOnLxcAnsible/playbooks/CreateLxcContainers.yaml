@@ -24,7 +24,6 @@
         - "security.nesting=true"
         - "security.privileged=true"
     with_items:
-    with_items:
       - "{{ controller_container }}"
       - "{{ worker_containers }}"
     when:
@@ -72,6 +71,9 @@
     when:
       state=="absent"
 
+  - name: "Debug whatever"
+    debug:
+      msg: "{{containers_info.results}}"
 
   - name: "Remove keys from known hosts for destroyed containers"
     # I remove the keys from ~/.ssh/known_hosts because if I run these scripts many times, it

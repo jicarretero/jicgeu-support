@@ -32,9 +32,11 @@
     when: type == "controller"
 
   - name:
-    # A network driver is needed for Kubernetes to run. We'll use flannel.
+    # A network driver is needed for Kubernetes to run. We'll use flannel. (Or Calico, depending the line)
+    # Calico doesn't go well in LXC... Pity
     shell: |
-      kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+      # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+      kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
     become_user: "{{user}}"
     when: type == "controller"
     

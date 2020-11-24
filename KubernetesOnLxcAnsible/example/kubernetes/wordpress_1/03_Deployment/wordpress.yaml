@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    name: wordpress-rs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: wordpress-rs
+  strategy:
+      type: RollingUpdate
+  template:
+  # A partir de aqui, la definicion del POD. Tal y como un pod.
+  # Excepto apiVersion y kind
+    metadata:
+      name: wordpress
+      labels:
+        name: wordpress-rs
+    spec:
+      containers:
+        - name: wordpress
+          image: wordpress:latest
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: mysql
+            - name: WORDPRESS_DB_USER
+              value: wordpress
+            - name: WORDPRESS_DB_PASSWORD
+              value: wordpress
+            - name: WORDPRESS_DB_NAME
+              value: wordpress

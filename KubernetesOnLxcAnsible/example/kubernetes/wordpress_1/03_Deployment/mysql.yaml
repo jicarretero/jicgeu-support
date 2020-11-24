@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    name: mysql-rs
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      name: mysql-rs
+  # Strategy es un nuevo concepto que se añade. El resto igual que el ReplicaSet
+  strategy:
+    type: RollingUpdate 
+          # Por defecto RollingUpdate. Se puede poner Recreate
+  template:
+  # A partir de aqui, la definicion del POD. Tal y como un pod.
+  # Excepto apiVersion y kind
+    metadata:
+      name: db
+      labels:
+        name: mysql-rs
+    spec:
+      containers:
+        - name: db
+          image: mysql:5.7
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: somwordpresspassword
+            - name: MYSQL_DATABASE
+              value: wordpress
+            - name: MYSQL_USER
+              value: wordpress
+            - name: MYSQL_PASSWORD
+              value: wordpress
+    

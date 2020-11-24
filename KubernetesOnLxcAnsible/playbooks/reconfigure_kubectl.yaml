@@ -1,0 +1,24 @@
+# sed -i '/\[Service\]/a Environment="KUBELET_EXTRA_ARGS=--node-ip='$IPADDR'"' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+# systemctl daemon-reload
+# systemctl restart kubelet
+
+- hosts: "{{host | default('all')}}"
+  tasks:
+  - name: "Debug it..."
+    debug:
+       msg: "adios: {{controller_ip}}"
+
+  - name: "Reconfigure kubectl in every node"
+    become: true
+    lineinfile:
+       path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+       insertafter: '^\[Service\]$'
+       line: "Environment=\"KUBELET_EXTRA_ARGS=--node-ip={{controller_ip}}\""
+
+  - name: "Restart Kubelete after the changes"
+    become: true
+    shell: |
+      systemctl daemon-reload
+      systemctl restart kubelet
+
+#ip=ip a show eth0 | awk '/ inet /  {print substr($2, 0, length($2)-3)}'

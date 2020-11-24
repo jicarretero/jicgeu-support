@@ -6,7 +6,7 @@
     # software-properties-common will be needed to add Google's key
     # Packages git and jq is for (my) convenience.
     apt:
-      name: ['docker', 'docker.io', 'curl', 'software-properties-common', 'git', 'jq']
+      name: ['docker', 'docker.io', 'curl', 'software-properties-common', 'git', 'jq', 'lsof']
       state: present
       update_cache: yes
 

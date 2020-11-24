@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    name: mysql-rs
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      name: mysql-rs
+  strategy:
+    type: RollingUpdate 
+  template:
+    metadata:
+      name: db
+      labels:
+        name: mysql-rs
+    spec:
+      ## Nodeselector especifica en que nodo queremos desplegar la aplicacion -- Util para que siempre se despliegue
+      ## en el mismo sitio y no perdamos la informacion del volumen
+      nodeSelector:
+        kubernetes.io/hostname: kworker1
+      containers:
+        - name: db
+          image: mysql:5.7
+          ## Especificamos el volumen que queremos montar y donde queremos montarlo
+          ## El volumen tenemos que definirlo en volumes
+          volumeMounts:
+            - name: mysql-volume
+              mountPath: /var/lib/mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: somwordpresspassword
+            - name: MYSQL_DATABASE
+              value: wordpress
+            - name: MYSQL_USER
+              value: wordpress
+            - name: MYSQL_PASSWORD
+              value: wordpress
+      ## Define los volumenes que van a estar disponibles.
+      volumes:
+        - name: mysql-volume
+          hostPath:
+            path: /data/mysql-data

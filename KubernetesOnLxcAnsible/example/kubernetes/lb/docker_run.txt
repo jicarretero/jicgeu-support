@@ -1,0 +1,8 @@
+sudo docker container run --restart unless-stopped \
+  --detach \
+  -v /home/ubuntu/kubernetes/lb/envoy.yaml:/etc/envoy/envoy.yaml \
+  -p 80:80 \
+  -p 443:443 \
+  --name envoyproxy \
+  envoyproxy/envoy-alpine:v1.13.0
+
