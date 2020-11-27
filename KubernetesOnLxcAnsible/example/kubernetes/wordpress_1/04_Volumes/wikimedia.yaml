@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wikimedia
+  labels:
+    name: wikimedia-rs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: wikimedia-rs
+  strategy:
+      type: RollingUpdate
+  template:
+  # A partir de aqui, la definicion del POD. Tal y como un pod.
+  # Excepto apiVersion y kind
+    metadata:
+      name: wikimedia
+      labels:
+        name: wikimedia-rs
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: kworker3
+      containers:
+        - name: wikimedia
+          image: mediawiki
+          volumeMounts:
+            - name: images
+              mountPath: /var/www/html/images
+      volumes:
+        - name: images
+          hostPath:
+            path: /data/images

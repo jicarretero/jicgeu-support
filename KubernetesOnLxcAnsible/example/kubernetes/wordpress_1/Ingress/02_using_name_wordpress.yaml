@@ -3,12 +3,12 @@ kind: Ingress
 metadata:
   name: wordpress
   labels:
-    app: wordpress-rs
+    name: wordpress-rs
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: wordpress.io
+    - host: wordpress.ji
       http:
         paths:
           - path: /

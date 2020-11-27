@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wikimedia-svc
+  labels:
+    name: wikimedia-rs
+spec:
+  type: ClusterIP
+  selector:
+    name: wikimedia-rs
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80

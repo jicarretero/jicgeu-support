@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    name: wordpress-rs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: wordpress-rs
+  strategy:
+      type: RollingUpdate
+  template:
+  # A partir de aqui, la definicion del POD. Tal y como un pod.
+  # Excepto apiVersion y kind
+    metadata:
+      name: wordpress
+      labels:
+        name: wordpress-rs
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: kworker2
+      containers:
+        - name: wordpress
+          image: wordpress:latest
+          volumeMounts:
+            - name: wp-plugins
+              mountPath: /var/www/html/wp-content/plugins
+            - name: wp-themes
+              mountPath: /var/www/html/wp-content/themes
+            - name: wp-uploads
+              mountPath: /var/www/html/wp-content/uploads
+            - name: wordpress-conf
+              mountPath: /etc/apache2/sites-enabled/000-default.conf
+              subPath: 000-default.conf
+            - name: certs
+              mountPath: /etc/apache2/certs
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: mysql
+            - name: WORDPRESS_DB_USER
+              value: wordpress
+            - name: WORDPRESS_DB_PASSWORD
+              value: wordpress
+            - name: WORDPRESS_DB_NAME
+              value: wordpress
+      volumes:
+        - name: wp-plugins
+          hostPath:
+            path: /data/wp-plugins
+        - name: wp-themes
+          hostPath:
+            path: /data/wp-themes
+        - name: wp-uploads
+          hostPath:
+            path: /data/wp-uploads
+        - name: certs
+          secret:
+            secretName: certs
+        - name: wordpress-conf
+          configMap:
+             name: wordpress-conf
