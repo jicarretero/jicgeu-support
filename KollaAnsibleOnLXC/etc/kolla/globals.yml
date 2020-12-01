@@ -691,3 +691,6 @@ nova_compute_virt_type: "kvm"
 rabbitmq_monitoring_password: "12345678"
 redis_master_password: "12345678"
 placement_database_password: "12345678"
+
+
+set_sysctl: "no"

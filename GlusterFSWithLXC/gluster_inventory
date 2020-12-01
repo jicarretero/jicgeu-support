@@ -1,0 +1,11 @@
+[local]
+localhost ansible_connection=local
+
+[gluster_containers]
+10.0.3.55 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu
+10.0.3.131 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu
+10.0.3.246 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu
+
+
+[all:vars]
+nodes=[ {"name": "gluster1", "ip": "10.0.3.55"}, {"name": "gluster2", "ip": "10.0.3.131"}, {"name": "gluster3", "ip": "10.0.3.246"}]

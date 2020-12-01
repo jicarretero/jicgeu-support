@@ -1,0 +1,20 @@
+- hosts: "{{host | default('all')}}"
+  become: true
+  tasks:
+  - name: "Copy the service file to Ubuntu's location"
+    copy:
+      src: "files/kmsg-create.service"
+      dest: "/lib/systemd/system/kmsg-create.service"
+      mode: 644
+
+  - name: "Copy the script to create the kmsg character device"
+    copy:
+      src: "files/kmsg-mknod"
+      dest: "/sbin/kmsg-mknod"
+      mode: 750
+
+  - name: "Ensure new kmsg service is enabled and up"
+    systemd:
+      name: kmsg-create
+      enabled: yes
+      state: started

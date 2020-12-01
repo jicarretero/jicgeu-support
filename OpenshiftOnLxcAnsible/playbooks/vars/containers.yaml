@@ -1,0 +1,6 @@
+controller_container:
+  - oscontroller
+worker_containers:
+  - osworker1
+  - osworker2
+  - osworker3

@@ -1,0 +1,11 @@
+[controller_container]
+10.0.3.34 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu type=controller
+
+[worker_containers]
+10.0.3.127 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu type=worker
+10.0.3.96 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu type=worker
+10.0.3.157 ansible_user=ubuntu ansible_ssh_pass=ubuntu ansible_become_pass=ubuntu type=worker
+
+[all:children]
+controller_container
+worker_containers

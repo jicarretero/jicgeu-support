@@ -1,0 +1,49 @@
+- hosts: gluster_containers
+  become: true
+  tasks:
+  - name: "Set /etc/hosts for every node"
+    lineinfile:
+       path: /etc/hosts
+       regexp: " {{item.name}}$"
+       line: "{{item.ip}}  {{item.name}}"
+       state: present
+    with_items:
+       "{{nodes}}"
+
+  - name: "Create /storage directory"
+    file:
+      path: /storage
+      owner: "root"
+      group: "root"
+      state: directory
+
+  - name: "Add some software to the containers"
+    apt:
+      name: ['curl', 'software-properties-common', 'git', 'jq', 'lsof']
+      state: present
+      update_cache: yes
+ 
+  - name: "Add GlusterFS 7 repository"
+    apt_repository:
+      state: present
+      repo: ppa:gluster/glusterfs-7
+
+  - name: "Install GlusterFS Software"
+    apt:
+      name: ['glusterfs-client', "glusterfs-server"]
+      state: present
+      update_cache: yes
+
+  - name: "Enable service glusterd"
+    systemd:
+      name: glusterd
+      enabled: yes
+      state: started
+
+  - name: "Connect peers"
+    shell: |
+       if [ "{{item.name}}" != "{{inventory_hostname}}" ]; then
+         gluster peer probe "{{item.name}}"
+       fi
+    with_items:
+       "{{nodes}}"

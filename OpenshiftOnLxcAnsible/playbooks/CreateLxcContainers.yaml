@@ -1,0 +1,76 @@
+- hosts: local
+  become: true
+  tasks:
+  - name: "Set state as a fact"
+    set_fact: state="{{state | default('started')}}"
+
+  - name: "Create LXC Containers if we need to start them"
+    # This is to avoid a run condition I'm meeting where I set /etc/hosts in next step: Sometimes
+    # the containers doesn't have an IP when this action finshes and this is a workaround to
+    # prevent a failure in the next step. The next task is basically the same, but the containers
+    # should have time enough to have their IP.
+    # Next task will register the container info (including the IPs), so I can edit later /etc/hosts
+    lxc_container:
+      name: "{{item}}"
+      template: centos
+      state: "started"
+      template_options: -R 7
+      container_config:
+        - "linux.kernel_modules=ip_tables,ip6_tables,netlink_diag,nf_nat,overlay"
+        - "lxc.apparmor.profile=unconfined" 
+        - "lxc.cap.drop=" 
+        - "lxc.cgroup.devices.allow=a" 
+        - "lxc.mount.auto=proc:rw sys:rw" 
+        - "security.nesting=true"
+        - "security.privileged=true"
+    with_items:
+      - "{{ controller_container }}"
+      - "{{ worker_containers }}"
+    when:
+      state=="started"
+
+  - name: Do some magic in the containers
+    lxc_container:
+      name: "{{item}}"
+      container_command: |
+        if [ ! $(id centos) ]; then
+          useradd -m -s /bin/bash -d /home/centos centos
+          mkdir /home/centos/.ssh
+          mkdir /root/.ssh
+          echo "{{ key }}" > /home/centos/.ssh/authorized_keys
+          echo "{{ key }}" > /root/.ssh/authorized_keys
+          yum -y install sudo
+          echo "centos    ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+          chown -R centos.centos /home/centos
+        fi
+    with_items:
+      - "{{ controller_container }}"
+      - "{{ worker_containers }}"
+    when:
+      state=="started"
+
+
+
+  - name: "Create or destroy LXC Containers"
+    lxc_container:
+      name: "{{item}}"
+      template: centos
+      state: "{{state}}"
+      template_options: -R 7
+      container_config:
+        - "linux.kernel_modules=ip_tables,ip6_tables,netlink_diag,nf_nat,overlay"
+        - "lxc.apparmor.profile=unconfined" 
+        - "lxc.cap.drop=" 
+        - "lxc.cgroup.devices.allow=a" 
+        - "lxc.mount.auto=proc:rw sys:rw" 
+        - "security.nesting=true"
+        - "security.privileged=true"
+    with_items:
+      - "{{ controller_container }}"
+      - "{{ worker_containers }}"
+    register: containers_info
+
+
+  vars_files:
+    - vars/containers.yaml
+    - vars/variables.yaml

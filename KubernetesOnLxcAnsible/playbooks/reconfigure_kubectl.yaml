@@ -1,9 +1,5 @@
 - hosts: "{{host | default('all')}}"
   tasks:
-  - name: "Debug it..."
-    debug:
-       msg: "adios: {{controller_ip}}"
-
   - name: "Reconfigure kubectl in every node"
     become: true
     lineinfile:

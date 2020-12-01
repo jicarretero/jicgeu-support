@@ -1,0 +1,4 @@
+#!/bin/bash
+
+[ -c /dev/kmsg ] || mknod /dev/kmsg c 1 11
+
