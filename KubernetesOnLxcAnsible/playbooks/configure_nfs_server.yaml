@@ -1,5 +1,6 @@
 - hosts: "{{host | default('all')}}"
   become: true
+  gather_facts: false
   tasks:
   - name: "Install Nfs server in controller"
     apt:

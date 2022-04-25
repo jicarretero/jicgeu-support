@@ -32,9 +32,11 @@
     shell: |
       modprobe "{{item}}"
     with_items:
+      - ip6_tables
       - ebtables
       - tap
       - ip_vs
+      - overlay
 
   - name: "Create or destroy LXC Containers"
     # Create a new container with 3 network interfaces:
@@ -49,37 +51,40 @@
       template_options: --release bionic --arch amd64 --dist ubuntu
       container_config:
         - "lxc.cgroup.devices.allow=c 10:200 rwm"
-        - "linux.kernel_modules=ip_tables,ip6_tables,netlink_diag,nf_nat,overlay,ip_vs,kvm,kvm_intel,tun,tap"
+        - "linux.kernel_modules=ip_tables,ip6_tables,netlink_diag,nf_nat,overlay,ip_vs,kvm,kvm_intel,tun,tap,overlay"
         - "lxc.apparmor.profile=unconfined"
         - "lxc.cap.drop="
         - "lxc.cgroup.devices.allow=a"
-        - "lxc.mount.auto=proc:rw sys:rw"
+        - "lxc.mount.auto=proc:rw sys:mixed"
         - "security.nesting=true"
         - "security.privileged=true"
         - "lxc.net.0.type=veth"
         - "lxc.net.0.flags=up"
-          "lxc.net.0.bride=lxcbr0"
+        - "lxc.net.0.link=lxcbr0"
+        - "lxc.net.0.hwaddr={{item.hw0}}"
         - "lxc.net.1.type=veth"
         - "lxc.net.1.link={{bridge_external}}"
-        - "lx.net.1.ipv4.address="
+        - "lxc.net.1.hwaddr={{item.hw1}}"
+        - "lxc.net.1.ipv4.address="
         - "lxc.net.1.flags=up"
         - "lxc.net.2.type=veth"
         - "lxc.net.2.link={{bridge}}"
         - "lxc.net.2.ipv4.address={{item.ip2}}"
+        - "lxc.net.2.hwaddr={{item.hw2}}"
         - "lxc.net.2.flags=up"
+
     with_items:
       - "{{ controller_container }}"
       - "{{ compute_containers }}"
     register: containers_info
 
-  - name: "Install Kolla ansible required packages"
-    # Install some software needed.
-    apt:
-      name: ["python3-dev", "libffi-dev", "gcc", "libssl-dev", "qemu-kvm"]
-      state: present
-      update_cache: yes
+  - name: "Configure containers for use!"
+    shell:
+      lxc-attach -n {{item.name}} < files/script_install.sh
+    with_items:
+      - "{{ controller_container }}"
+      - "{{ compute_containers }}"
     when:
       state=="started"
-
   vars_files:
     - vars/containers.yaml

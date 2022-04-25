@@ -1,4 +1,5 @@
 - hosts: "{{host | default('all')}}"
+  gather_facts: false
   tasks:
   - name: "Reconfigure kubectl in every node"
     become: true
@@ -12,5 +13,3 @@
     shell: |
       systemctl daemon-reload
       systemctl restart kubelet
-
-

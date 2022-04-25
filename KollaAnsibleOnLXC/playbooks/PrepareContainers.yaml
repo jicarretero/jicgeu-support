@@ -1,13 +1,14 @@
 - hosts: all
   become: true
+  gather_facts: false
   tasks:
   - name: Create Group for kolla user. Add group kolla
-    group: 
+    group:
       name: kolla
       state: present
 
   - name: Create Kolla user with kolla group. Create user kolla
-    user: 
+    user:
       name: kolla
       comment: Kolla user
       group: kolla
@@ -38,7 +39,7 @@
     with_items:
       - "{{ controller_container }}"
       - "{{ compute_containers }}"
-   
+
   - name: Insert Neplan template
     # Insert Network configuration file.
     template:
@@ -56,13 +57,13 @@
   - name: "Install Kolla ansible required packages"
     # Install a few packages required for ansible-kolla to work properly (lsof is my convenience).
     apt:
-      name: ["gpg","ufw", "software-properties-common", "lsof", "python3-setuptools", 
+      name: ["gpg","ufw", "software-properties-common", "lsof", "python3-setuptools",
              "python3-pip", "python-docker", "python3-docker", "python3-dev"]
       state: present
       update_cache: yes
 
   - name: "Copy service to set /run shared"
-    # Add the service to create the needed character devices in the containers at startup 
+    # Add the service to create the needed character devices in the containers at startup
     # and set the /run as shared. This is needed for the Openstack dockers.
     copy:
       src: "files/shared-run.service"

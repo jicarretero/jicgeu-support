@@ -1,5 +1,6 @@
 - hosts: "{{host | default('all')}}"
   become: true
+  gather_facts: false
   tasks:
   - name: "Install Dockers inside the container"
     # I install here the packages needed to run docker service (docker and docker.io)
@@ -16,7 +17,7 @@
     systemd:
       name: docker
       enabled: yes
-      state: started 
+      state: started
 
   - name: "Add Google's kubernetes key"
     # Add the APT key, so I can add later the Repository and install software from the
@@ -51,7 +52,7 @@
       regexp: "^net.bridge.bridge-nf-call-iptables="
       line: "net.bridge.bridge-nf-call-iptables=1"
 
-  - name: 
+  - name:
     # Reload the configuration from previous step.
     shell: |
       sysctl -p

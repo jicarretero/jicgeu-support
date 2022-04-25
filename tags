@@ -1,0 +1,122 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/jicg/Personal/jicg-support/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	/p5.9.20210110.0/
+0	KubernetesOnLxcAnsible/playbooks/files/daemon.json	/^  "exec-opts": ["native.cgroupdriver=systemd"],$/;"	s	array:exec-opts
+Adding Disk Images to Glance	KollaAnsibleOnLXC/examples/README.md	/^## Adding Disk Images to Glance$/;"	s	chapter:Some useful tips to start using your Openstack Installation
+Adding Flavors	KollaAnsibleOnLXC/examples/README.md	/^## Adding Flavors$/;"	s	chapter:Some useful tips to start using your Openstack Installation
+Adding a router.	KollaAnsibleOnLXC/examples/README.md	/^### Adding a router.$/;"	S	section:Some useful tips to start using your Openstack Installation""Networks
+Before	KollaAnsibleOnLXC/playbooks/files/shared-run.service	/^Before=docker.service$/;"	k	section:Unit
+Before	KubernetesOnLxcAnsible/playbooks/files/kmsg-create.service	/^Before=kubelet.service$/;"	k	section:Unit
+Before	OpenshiftOnLxcAnsible/playbooks/files/kmsg-create.service	/^Before=kubelet.service$/;"	k	section:Unit
+Caveat	GlusterFSWithLXC/README.md	/^## Caveat$/;"	s	chapter:Gluster Cluster On Lxc Using Ansible to Deploy
+Caveat	KubernetesOnLxcAnsible/README.md	/^## Caveat$/;"	s	chapter:Kubernetes On Lxc Using Ansible to Deploy
+Caveat	OpenshiftOnLxcAnsible/README.md	/^## Caveat$/;"	s	chapter:Kubernetes On Lxc Using Ansible to Deploy
+Description	KollaAnsibleOnLXC/playbooks/files/shared-run.service	/^Description=ensure \/run is shared$/;"	k	section:Unit
+Description	KubernetesOnLxcAnsible/playbooks/files/kmsg-create.service	/^Description=Create \/dev\/kmsg before starting Kubernetes.$/;"	k	section:Unit
+Description	OpenshiftOnLxcAnsible/playbooks/files/kmsg-create.service	/^Description=Create \/dev\/kmsg before starting Kubernetes.$/;"	k	section:Unit
+ExecStart	KollaAnsibleOnLXC/playbooks/files/shared-run.service	/^ExecStart=\/sbin\/shared-run.sh$/;"	k	section:Service
+ExecStart	KubernetesOnLxcAnsible/playbooks/files/kmsg-create.service	/^ExecStart=\/sbin\/kmsg-mknod$/;"	k	section:Service
+ExecStart	OpenshiftOnLxcAnsible/playbooks/files/kmsg-create.service	/^ExecStart=\/sbin\/kmsg-mknod$/;"	k	section:Service
+External network	KollaAnsibleOnLXC/examples/README.md	/^### External network$/;"	S	section:Some useful tips to start using your Openstack Installation""Networks
+Gluster Cluster On Lxc Using Ansible to Deploy	GlusterFSWithLXC/README.md	/^# Gluster Cluster On Lxc Using Ansible to Deploy$/;"	c
+Install	KollaAnsibleOnLXC/playbooks/files/shared-run.service	/^[Install]$/;"	s
+Install	KubernetesOnLxcAnsible/playbooks/files/kmsg-create.service	/^[Install]$/;"	s
+Install	OpenshiftOnLxcAnsible/playbooks/files/kmsg-create.service	/^[Install]$/;"	s
+Installation	GlusterFSWithLXC/README.md	/^## Installation$/;"	s	chapter:Gluster Cluster On Lxc Using Ansible to Deploy
+Installation	KubernetesOnLxcAnsible/README.md	/^## Installation$/;"	s	chapter:Kubernetes On Lxc Using Ansible to Deploy
+Installation	OpenshiftOnLxcAnsible/README.md	/^## Installation$/;"	s	chapter:Kubernetes On Lxc Using Ansible to Deploy
+Internal network.	KollaAnsibleOnLXC/examples/README.md	/^### Internal network.$/;"	S	section:Some useful tips to start using your Openstack Installation""Networks
+Introduction	GlusterFSWithLXC/README.md	/^## Introduction$/;"	s	chapter:Gluster Cluster On Lxc Using Ansible to Deploy
+Introduction	KubernetesOnLxcAnsible/README.md	/^## Introduction$/;"	s	chapter:Kubernetes On Lxc Using Ansible to Deploy
+Introduction	OpenshiftOnLxcAnsible/README.md	/^## Introduction$/;"	s	chapter:Kubernetes On Lxc Using Ansible to Deploy
+Kubernetes Infrastructure Over LXC	README.md	/^## Kubernetes Infrastructure Over LXC$/;"	s	chapter:[jicg.eu](https://jicg.eu)
+Kubernetes On Lxc Using Ansible to Deploy	KubernetesOnLxcAnsible/README.md	/^# Kubernetes On Lxc Using Ansible to Deploy$/;"	c
+Kubernetes On Lxc Using Ansible to Deploy	OpenshiftOnLxcAnsible/README.md	/^# Kubernetes On Lxc Using Ansible to Deploy$/;"	c
+Networks	KollaAnsibleOnLXC/examples/README.md	/^## Networks$/;"	s	chapter:Some useful tips to start using your Openstack Installation
+Openstack Infrastructure Over LXC	README.md	/^## Openstack Infrastructure Over LXC$/;"	s	chapter:[jicg.eu](https://jicg.eu)
+RemainAfterExit	KollaAnsibleOnLXC/playbooks/files/shared-run.service	/^RemainAfterExit=yes$/;"	k	section:Service
+RemainAfterExit	KubernetesOnLxcAnsible/playbooks/files/kmsg-create.service	/^RemainAfterExit=yes$/;"	k	section:Service
+RemainAfterExit	OpenshiftOnLxcAnsible/playbooks/files/kmsg-create.service	/^RemainAfterExit=yes$/;"	k	section:Service
+Service	KollaAnsibleOnLXC/playbooks/files/shared-run.service	/^[Service]$/;"	s
+Service	KubernetesOnLxcAnsible/playbooks/files/kmsg-create.service	/^[Service]$/;"	s
+Service	OpenshiftOnLxcAnsible/playbooks/files/kmsg-create.service	/^[Service]$/;"	s
+Some useful tips to start using your Openstack Installation	KollaAnsibleOnLXC/examples/README.md	/^# Some useful tips to start using your Openstack Installation$/;"	c
+The fast way	KubernetesOnLxcAnsible/README.md	/^## The fast way$/;"	s	chapter:Kubernetes On Lxc Using Ansible to Deploy
+The fast way	OpenshiftOnLxcAnsible/README.md	/^## The fast way$/;"	s	chapter:Kubernetes On Lxc Using Ansible to Deploy
+TimeoutSec	KollaAnsibleOnLXC/playbooks/files/shared-run.service	/^TimeoutSec=0$/;"	k	section:Service
+TimeoutSec	KubernetesOnLxcAnsible/playbooks/files/kmsg-create.service	/^TimeoutSec=0$/;"	k	section:Service
+TimeoutSec	OpenshiftOnLxcAnsible/playbooks/files/kmsg-create.service	/^TimeoutSec=0$/;"	k	section:Service
+Type	KollaAnsibleOnLXC/playbooks/files/shared-run.service	/^Type=oneshot$/;"	k	section:Service
+Type	KubernetesOnLxcAnsible/playbooks/files/kmsg-create.service	/^Type=oneshot$/;"	k	section:Service
+Type	OpenshiftOnLxcAnsible/playbooks/files/kmsg-create.service	/^Type=oneshot$/;"	k	section:Service
+Unit	KollaAnsibleOnLXC/playbooks/files/shared-run.service	/^[Unit]$/;"	s
+Unit	KubernetesOnLxcAnsible/playbooks/files/kmsg-create.service	/^[Unit]$/;"	s
+Unit	OpenshiftOnLxcAnsible/playbooks/files/kmsg-create.service	/^[Unit]$/;"	s
+WantedBy	KollaAnsibleOnLXC/playbooks/files/shared-run.service	/^WantedBy=multi-user.target$/;"	k	section:Install
+WantedBy	KubernetesOnLxcAnsible/playbooks/files/kmsg-create.service	/^WantedBy=multi-user.target$/;"	k	section:Install
+WantedBy	OpenshiftOnLxcAnsible/playbooks/files/kmsg-create.service	/^WantedBy=multi-user.target$/;"	k	section:Install
+[jicg.eu](https://jicg.eu)	README.md	/^# [jicg.eu](https:\/\/jicg.eu)$/;"	c
+container	GlusterFSWithLXC/GenerateEnvironment.py	/^   container=lxc.Container(c)$/;"	v
+container	KubernetesOnLxcAnsible/GenerateEnvironment.py	/^   container=lxc.Container(c)$/;"	v
+container	OpenshiftOnLxcAnsible/GenerateEnvironment.py	/^   container=lxc.Container(c)$/;"	v
+controller_ip	KubernetesOnLxcAnsible/GenerateEnvironment.py	/^   controller_ip = container.get_ips(timeout=5)[0]$/;"	v
+exec-opts	KubernetesOnLxcAnsible/playbooks/files/daemon.json	/^  "exec-opts": ["native.cgroupdriver=systemd"],$/;"	a
+log-driver	KubernetesOnLxcAnsible/playbooks/files/daemon.json	/^  "log-driver": "json-file",$/;"	s
+log-opts	KubernetesOnLxcAnsible/playbooks/files/daemon.json	/^  "log-opts": {$/;"	o
+max-size	KubernetesOnLxcAnsible/playbooks/files/daemon.json	/^    "max-size": "100m"$/;"	s	object:log-opts
+node_ip	GlusterFSWithLXC/GenerateEnvironment.py	/^   node_ip = container.get_ips(timeout=5)[0]$/;"	v
+nodes	GlusterFSWithLXC/GenerateEnvironment.py	/^nodes={}$/;"	v
+obj	GlusterFSWithLXC/GenerateEnvironment.py	/^   obj=yaml.load(f, Loader=yaml.FullLoader)$/;"	v
+obj	KollaAnsibleOnLXC/GenerateEnvironment.py	/^   obj=yaml.load(f, Loader=yaml.FullLoader)$/;"	v
+obj	KubernetesOnLxcAnsible/GenerateEnvironment.py	/^   obj=yaml.load(f, Loader=yaml.FullLoader)$/;"	v
+obj	OpenshiftOnLxcAnsible/GenerateEnvironment.py	/^   obj=yaml.load(f, Loader=yaml.FullLoader)$/;"	v
+printf	GlusterFSWithLXC/GenerateEnvironment.py	/^def printf(format, *args):$/;"	f
+sep	GlusterFSWithLXC/GenerateEnvironment.py	/^   sep=","$/;"	v
+sep	GlusterFSWithLXC/GenerateEnvironment.py	/^sep=""$/;"	v
+storage-driver	KubernetesOnLxcAnsible/playbooks/files/daemon.json	/^  "storage-driver": "overlay2"$/;"	s
+wgAuthenticationTokenVersion	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgAuthenticationTokenVersion = "1";$/;"	v
+wgDBTableOptions	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";$/;"	v
+wgDBname	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgDBname = "k8swiki";$/;"	v
+wgDBpassword	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgDBpassword = "somwordpresspassword";$/;"	v
+wgDBprefix	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgDBprefix = "";$/;"	v
+wgDBserver	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgDBserver = "mysql";$/;"	v
+wgDBtype	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgDBtype = "mysql";$/;"	v
+wgDBuser	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgDBuser = "root";$/;"	v
+wgDefaultSkin	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgDefaultSkin = "vector";$/;"	v
+wgDiff3	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgDiff3 = "\/usr\/bin\/diff3";$/;"	v
+wgEmailAuthentication	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgEmailAuthentication = true;$/;"	v
+wgEmergencyContact	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgEmergencyContact = "jicg@jicg.eu";$/;"	v
+wgEnableEmail	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgEnableEmail = true;$/;"	v
+wgEnableUploads	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgEnableUploads = false;$/;"	v
+wgEnableUserEmail	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgEnableUserEmail = true; # UPO$/;"	v
+wgEnotifUserTalk	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgEnotifUserTalk = false; # UPO$/;"	v
+wgEnotifWatchlist	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgEnotifWatchlist = false; # UPO$/;"	v
+wgImageMagickConvertCommand	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgImageMagickConvertCommand = "\/usr\/bin\/convert";$/;"	v
+wgLanguageCode	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgLanguageCode = "en";$/;"	v
+wgLogos	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgLogos = [ '1x' => "$wgResourceBasePath\/resources\/assets\/wiki.png" ];$/;"	v
+wgMainCacheType	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgMainCacheType = CACHE_ACCEL;$/;"	v
+wgMemCachedServers	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgMemCachedServers = [];$/;"	v
+wgMetaNamespace	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgMetaNamespace = "K8swiki";$/;"	v
+wgPasswordSender	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgPasswordSender = "jicg@jicg.eu";$/;"	v
+wgPingback	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgPingback = true;$/;"	v
+wgResourceBasePath	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgResourceBasePath = $wgScriptPath;$/;"	v
+wgRightsIcon	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgRightsIcon = "";$/;"	v
+wgRightsPage	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgRightsPage = ""; # Set to the title of a wiki page that describes your license\/copyright$/;"	v
+wgRightsText	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgRightsText = "";$/;"	v
+wgRightsUrl	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgRightsUrl = "";$/;"	v
+wgScriptPath	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgScriptPath = "";$/;"	v
+wgSecretKey	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgSecretKey = "93dc50b75efa0066ad82c40d88eaaa843bfa8bb0a3f707dc8310e27bc35a80e1";$/;"	v
+wgServer	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgServer = "https:\/\/wikimedia.ji";$/;"	v
+wgShellLocale	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgShellLocale = "C.UTF-8";$/;"	v
+wgSitename	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgSitename = "k8swiki";$/;"	v
+wgUpgradeKey	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgUpgradeKey = "16c0c1dcc90af097";$/;"	v
+wgUseImageMagick	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgUseImageMagick = true;$/;"	v
+wgUseInstantCommons	KubernetesOnLxcAnsible/example/kubernetes/wordpress_1/ConfigMap/LocalSettings.php	/^$wgUseInstantCommons = false;$/;"	v

@@ -1,6 +1,7 @@
 - hosts: "{{host | default('all')}}"
   become: true
-  tasks: 
+  gather_facts: false
+  tasks:
   - name: "Init Kubernetes Cluster... this can take some long time"
     # Inside the container, we need to use --ignore-preflight-errors=all. However, if we used this
     # in a Virtual Machine/Server we should run this without the parameter.
@@ -39,7 +40,7 @@
       kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
     become_user: "{{user}}"
     when: type == "controller"
-    
+
   - name: "Get Join Command from Kubernetes"
     # Exec the command to get the join command in the Controller. So I can create later an script which
     # can be exec'd in the Workers
@@ -48,7 +49,7 @@
       kubeadm token create --print-join-command
     register: kubeadm_join_output
     when: type == "controller"
-  
+
   - set_fact: kube_join_command="{{kubeadm_join_output.stdout}} {{k8s_extra_parameters}}"
     when: type == "controller"
 
@@ -83,4 +84,3 @@
 
   vars_files:
     - vars/variables.yaml
-

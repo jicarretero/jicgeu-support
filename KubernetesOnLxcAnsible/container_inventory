@@ -13,3 +13,4 @@ worker_containers
 
 [all:vars]
 controller_ip=10.0.3.85
+nfs-server=10.0.3.85
